@@ -18,7 +18,16 @@ class GameObject
     const TYPE_MARKED_UNDISCOVERED = 6;
     const TYPE_MARKED_MINE = 7;
 
+    /**
+     * @var int
+     */
     public $type;
+    /**
+     * Defining the number of mines around the given cell.
+     * Only used with the objects of type GameObject::TYPE_NUMBER.
+     * 
+     * @var int
+     */ 
     public $number;
 
     public function __construct($type = 0)
@@ -26,6 +35,11 @@ class GameObject
         $this->type = $type;
     }
 
+    /**
+     * Returns if the game object is any of the types with mine.
+     * 
+     * @return bool
+     */
     public function hasMine()
     {
         return ($this->type == GameObject::TYPE_MINE or
@@ -34,6 +48,11 @@ class GameObject
             $this->type == GameObject::TYPE_MARKED_MINE);
     }
 
+    /**
+     * Returns if the game object has been marked.
+     * 
+     * @return bool
+     */
     public function isMarked()
     {
         return ($this->type == GameObject::TYPE_MARKED_UNDISCOVERED or
@@ -42,6 +61,8 @@ class GameObject
 
     /**
      * Returns the number of mines around this cell.
+     *
+     * @return int
      */
     public function getNumber()
     {

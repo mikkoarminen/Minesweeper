@@ -3,6 +3,14 @@
  */
 
 $(document).ready(function() {
+    
+    /*
+     * Set mouse actions for undiscovered cells.
+     * 
+     * Cell should be highlighted when entered.
+     * Cell should have an effect when clicked.
+     */
+    
     $('.undiscovered').mousedown(function() {
         $(this).addClass("pressed"); 
         $(this).removeClass("active");
@@ -21,6 +29,13 @@ $(document).ready(function() {
         $(this).removeClass("pressed active");
     });
     
+    /*
+     * Set mouse actions for number cells.
+     * 
+     * When cell is clicked all surrounding undiscovered cells should
+     * have an effect.
+     */
+     
     $('.number').mousedown(function() {
         var id = $(this).attr('id');
         var point = id.split('_');
@@ -28,26 +43,26 @@ $(document).ready(function() {
         var column = parseInt(point[1]);
 
         // Set all surrounding undiscovered cells pressed.
-        $('#' + (row-1) + '_' + (column-1) + '.undiscovered').addClass('pressed');
-        $('#' + (row-1) + '_' + column + '.undiscovered').addClass('pressed');
-        $('#' + (row-1) + '_' + (column+1) + '.undiscovered').addClass('pressed');
-        $('#' + row + '_' + (column-1) + '.undiscovered').addClass('pressed');
-        $('#' + row + '_' + (column+1) + '.undiscovered').addClass('pressed');
-        $('#' + (row+1) + '_' + (column-1) + '.undiscovered').addClass('pressed');
-        $('#' + (row+1) + '_' + column + '.undiscovered').addClass('pressed');
-        $('#' + (row+1) + '_' + (column+1) + '.undiscovered').addClass('pressed');
+        for (var r = row-1; r <= row+1; r++) {
+            for (var c = column-1; c <= column+1; c++) {
+                var cell = $('#' + (r) + '_' + (c) + '.undiscovered'); 
+                if (cell) {
+                    $(cell).addClass('pressed');
+                }
+            }
+        }
     });
 
     function removePressed(row, column) {
         // Set all surrounding undiscovered cells pressed.
-        $('#' + (row-1) + '_' + (column-1) + '.undiscovered').removeClass('pressed');
-        $('#' + (row-1) + '_' + column + '.undiscovered').removeClass('pressed');
-        $('#' + (row-1) + '_' + (column+1) + '.undiscovered').removeClass('pressed');
-        $('#' + row + '_' + (column-1) + '.undiscovered').removeClass('pressed');
-        $('#' + row + '_' + (column+1) + '.undiscovered').removeClass('pressed');
-        $('#' + (row+1) + '_' + (column-1) + '.undiscovered').removeClass('pressed');
-        $('#' + (row+1) + '_' + column + '.undiscovered').removeClass('pressed');
-        $('#' + (row+1) + '_' + (column+1) + '.undiscovered').removeClass('pressed');
+        for (var r = row-1; r <= row+1; r++) {
+            for (var c = column-1; c <= column+1; c++) {
+                var cell = $('#' + (r) + '_' + (c) + '.undiscovered'); 
+                if (cell) {
+                    $(cell).removeClass('pressed');
+                }
+            }
+        }
     }
 
     $('.number').mouseup(function() {
@@ -83,6 +98,7 @@ $(function() {
         window.location = routeMakeMove + '?column=' + column + '&row=' + row; // Simple URL param concatenation.
     });
     
+    // Find out the route to the markCell -action.
     var routeMarkCell = $('#game').data('route-mark-cell');
 
     $('.game-cell').bind("contextmenu",function(e){

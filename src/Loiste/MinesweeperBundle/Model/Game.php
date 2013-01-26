@@ -24,15 +24,43 @@ class Game
      * @var array
      */
     public $gameArea;
-    
+    /**
+     * State of the game.
+     * 
+     * Possible values: Game::STATE_BEGINNING, Game::STATE_RUNNING,
+     * Game::STATE_READY, Game::STATE::GAME_OVER
+     * 
+     * @var int
+     */
     private $state;
+    /**
+     * Total number of mines in the game area.
+     * @var int
+     */
     private $mineCount;
+    /**
+     * Number of cell rows.
+     * @var int
+     */
     private $rows;
+    /**
+     * Number of cell columns.
+     * @var int
+     */
     private $columns;
-    private $mineDensity;
-    
+    /**
+     * Number of cell that haven't been opened.
+     * @var int
+     */
     private $undiscoveredCellCount;
 
+    /**
+     * Initializes the game object.
+     * 
+     * @param int $rows
+     * @param int $columns
+     * @param int $mineCount
+     */
     public function __construct($rows=Game::ROW_COUNT, 
         $columns=Game::COL_COUNT, $mineCount=Game::MINE_COUNT)
     {
@@ -74,11 +102,22 @@ class Game
         }
     }
     
+    /**
+     * Returns the state of the game object.
+     * 
+     * @return int As defined in Game::STATE_*
+     */
     public function getState()
     {
         return $this->state;
     }
     
+    /**
+     * Sets cell marked or removes the mark added earlier.
+     * 
+     * @param int $row
+     * @param int $column
+     */
     public function markCell($row, $column)
     {
         switch ($this->gameArea[$row][$column]->type) {
@@ -97,6 +136,19 @@ class Game
         }
     }
     
+    /**
+     * Opens the given cell. If the given cell is empty (doesn't have
+     * surrounding mines) the surrounding cells are opened recursively.
+     * 
+     * Opening a cell with mine causes the game to end.
+     * 
+     * If number cell is "opened" and the value of the cell matches to
+     * the number of the surrounding marks, the remaining undiscovered
+     * surrounding cells are opened.
+     * 
+     * @param int $row
+     * @param int $column
+     */
     public function openCell($row, $column)
     {
         if ($this->state == Game::STATE_BEGINNING) {
@@ -156,11 +208,10 @@ class Game
                 }
             }
             
-            // TODO: Lock game area.
             $this->state = Game::STATE_GAME_OVER;
         }
         // If number cell is clicked the surrounding cells should be opened
-        // if there is number of surrounding cells marked matching to
+        // when the number of surrounding cells with marks matches to
         // the value of the number field.
         elseif ($this->gameArea[$row][$column]->type == GameObject::TYPE_NUMBER) {
             $surroundingMarkCount = $this->getSurroundingMarks($row, $column);
@@ -188,21 +239,35 @@ class Game
             }
         }
         
+        // Check if all the discoverable cells have been opened.
         if ($this->isReady()) {
             $this->state = Game::STATE_READY;
         }
         
     }
     
+    /**
+     * Returns if all the discoverable cells have been opened.
+     * 
+     * @return bool
+     */
     private function isReady() {
         return ($this->undiscoveredCellCount == $this->mineCount);
     }
     
+    /**
+     * Returns the number of the marked cells around the given cell.
+     * 
+     * @param int $row
+     * @param int $column
+     * 
+     * @return int
+     */
     private function getSurroundingMarks($row, $column)
     {
         $markedCount = 0;
         
-        // Test all surrounding cells for existence of a mine.
+        // Test all surrounding cells for existence of a mark.
         for ($r = $row-1; $r <= $row+1; $r++) {
             for ($c = $column-1; $c <= $column+1; $c++) {
                 // Only test for valid indexes.
@@ -224,7 +289,12 @@ class Game
     
     /**
      * Returns the number of mines around the given cell.
-     */
+     * 
+     * @param int $row
+     * @param int $column
+     * 
+     * @return int
+     */     
     private function getMineCount($row, $column) 
     {
         $mineCount = 0;
