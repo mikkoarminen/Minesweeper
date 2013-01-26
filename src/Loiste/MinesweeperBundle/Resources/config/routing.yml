@@ -5,3 +5,7 @@ LoisteMinesweeperBundle_start:
 LoisteMinesweeperBundle_makeMove:
     pattern: /makeMove
     defaults: { _controller: LoisteMinesweeperBundle:Game:makeMove}
+    
+LoisteMinesweeperBundle_markCell:
+    pattern: /markMine
+    defaults: { _controller: LoisteMinesweeperBundle:Game:markCell}

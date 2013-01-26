@@ -30,6 +30,14 @@ h1 {
     margin: 0 auto;
 }
 
+.active {
+    opacity: 0.9;
+}
+
+.pressed {
+    opacity: 0.5;
+}
+
 .game-number {
     font-size: 32px;
     font-weight: bold;

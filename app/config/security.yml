@@ -31,4 +31,3 @@ security:
                 path:   /demo/secured/logout
                 target: /demo/
 
-    access_control:
