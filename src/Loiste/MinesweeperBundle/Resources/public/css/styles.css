@@ -48,3 +48,12 @@ h1 {
     font-size: 32px;
     font-weight: bold;
 }
+
+#slider {
+    width: 300px;
+    margin: 10px 0px 10px 5px;
+}
+
+#slider-labels {
+    width: 300px;
+}

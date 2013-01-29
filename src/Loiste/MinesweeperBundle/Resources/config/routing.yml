@@ -9,3 +9,7 @@ LoisteMinesweeperBundle_makeMove:
 LoisteMinesweeperBundle_markCell:
     pattern: /markMine
     defaults: { _controller: LoisteMinesweeperBundle:Game:markCell}
+    
+LoisteMinesweeperBundle_setDensity:
+    pattern: /setDensity
+    defaults: { _controller: LoisteMinesweeperBundle:Game:setDensity}

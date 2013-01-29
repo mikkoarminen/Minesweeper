@@ -1,3 +1,11 @@
+### Implemented functionality
+* opening cells with expanding reveal
+* opening mine cell causes the game to end
+* controllable mine density
+* right mouse click to add flags
+* left mouse click on number cell opens surrounding cells if number of the cell matches to the number of flags in surrounding cells
+* some effects added using css and javascript
+
 <img src="https://raw.github.com/mikkoarminen/Minesweeper/master/screenshot.png" />
 
 A simple Minesweeper clone to test employee candidates. This project is not finished, and it is indented to be so.

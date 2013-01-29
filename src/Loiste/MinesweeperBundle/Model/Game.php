@@ -9,7 +9,7 @@ class Game
 {
     const ROW_COUNT = 10;
     const COL_COUNT = 20;
-    const MINE_COUNT = 20;
+    const MINE_DENSITY = 0.2;
 
     const STATE_BEGINNING = 0;
     const STATE_RUNNING = 1;
@@ -33,6 +33,10 @@ class Game
      * @var int
      */
     private $state;
+    /**
+     * The mine density used to calculate the number of mines.
+     */
+    private $mineDensity;
     /**
      * Total number of mines in the game area.
      * @var int
@@ -62,11 +66,12 @@ class Game
      * @param int $mineCount
      */
     public function __construct($rows=Game::ROW_COUNT, 
-        $columns=Game::COL_COUNT, $mineCount=Game::MINE_COUNT)
+        $columns=Game::COL_COUNT, $mineDensity=Game::MINE_DENSITY)
     {
+        $this->mineDensity = $mineDensity;
         $this->rows = $rows;
         $this->columns = $columns;
-        $this->mineCount = $mineCount;
+        $this->mineCount = intval($rows * $columns * $mineDensity);
         
         $this->state = Game::STATE_BEGINNING;
         
@@ -110,6 +115,16 @@ class Game
     public function getState()
     {
         return $this->state;
+    }
+    
+    /**
+     * Returns the mine density used in game initialization.
+     * 
+     * @return int
+     */
+    public function getMineDensity()
+    {
+        return $this->mineDensity;
     }
     
     /**
@@ -240,8 +255,10 @@ class Game
         }
         
         // Check if all the discoverable cells have been opened.
-        if ($this->isReady()) {
-            $this->state = Game::STATE_READY;
+        if ($this->state != Game::STATE_GAME_OVER) {
+            if ($this->isReady()) {
+                $this->state = Game::STATE_READY;
+            }
         }
         
     }

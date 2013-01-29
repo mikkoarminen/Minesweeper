@@ -82,6 +82,59 @@ $(document).ready(function() {
 
         removePressed(row, column);
     });
+
+    // Set density slider
+    
+    // Find out the route to the makeMove -action.
+    var routeSetDensity = $('#density').data('route-set-density');
+    
+    /**
+     * Updates value of the slider label container.
+     */
+    function updateDensityLabel(event, ui) {
+        if (ui.value != null) {
+            $("#density").html(ui.value);
+        }
+    }
+    
+    /**
+     * Makes request to change the density.
+     */
+    function setDensity(event, ui) {
+        updateDensityLabel(event, ui);
+        
+        window.location = routeSetDensity + '?density=' + ui.value;       
+    }
+    
+    var MIN = 10;
+    var MAX = 50;
+    var STEP = 10;
+    
+    $("#slider").slider({
+        animate: true,
+        range: "min",
+        min: MIN,
+        max: MAX,
+        step: STEP,
+        value: parseInt($("#density").html()),
+        slide: updateDensityLabel,
+        change: updateDensityLabel,
+        stop: setDensity,
+        create: updateDensityLabel
+    });
+    
+    // Set slider labels.
+    var options = [];
+    for (var i = MIN; i <= MAX; i += STEP) {
+        options.push(i);
+    }
+    
+    var sliderWidth = parseInt($("#slider").width());
+    var width = parseInt(sliderWidth / (options.length - 1));
+    
+    //after the slider create a containing div with p tags of a set width.
+    $("#slider").after('<div class="ui-slider-legend"><div style="float: left; width:' + width + 'px;">' + options.join('</div><div style="float: left; width:' + width + 'px;">') +'</div></div>');
+    
 });
 
 $(function() {

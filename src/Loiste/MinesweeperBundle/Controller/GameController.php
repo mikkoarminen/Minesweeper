@@ -21,14 +21,21 @@ class GameController extends Controller
     {
         return $this->render('LoisteMinesweeperBundle:Default:index.html.twig', array(
             'gameArea' => $this->game->gameArea,
-            'gameState' => $this->game->getState()
+            'gameState' => $this->game->getState(),
+            'mineDensity' => $this->game->getMineDensity(),
         ));
     }
     
     public function startAction()
     {
-        // Setup an empty game. To keep things very simple for candidates, we just store info on the session.
-        $this->game = new Game();
+        $game = $this->session->get('game');
+        // Use the previously selected mine density if exists.
+        if ($game) {
+            $density = $game->getMineDensity();
+            $this->game = new Game(Game::ROW_COUNT, Game::COL_COUNT, $density);
+        } else {
+            $this->game = new Game();
+        }
         $this->session->set('game', $this->game);
         return $this->getResponse();
     }
@@ -63,6 +70,19 @@ class GameController extends Controller
         return $this->getResponse();
     }
     
-    
-    
+    public function setDensityAction()
+    {
+        $density = $this->getRequest()->get('density');
+
+        $this->game = $this->session->get('game'); /** @var $game Game */
+
+        $state = $this->game->getState();
+
+        // Setup an empty game with new mine density.
+        $this->game = new Game(Game::ROW_COUNT, Game::COL_COUNT, $density/100);
+        $this->session->set('game', $this->game);
+
+        return $this->getResponse();
+    }
+        
 }

@@ -4,6 +4,16 @@
 
 <h1>Minesweeper</h1>
 
+<div style="float: left">
+    Mine density &#37;:
+    <div id="slider"></div>
+    <div id="density" style="visibility: hidden;" data-route-set-density="{{ path('LoisteMinesweeperBundle_setDensity') }}">{{ mineDensity * 100}}</div>
+
+    <form method="get" action="{{ path('LoisteMinesweeperBundle_start') }}">
+        <input type="submit" value="Restart" />
+    </form>
+</div>
+
 <table id="game" data-route-make-move="{{ path('LoisteMinesweeperBundle_makeMove') }}"
     data-route-mark-cell="{{ path('LoisteMinesweeperBundle_markCell') }}">
     {% for row in 0..9 %}
